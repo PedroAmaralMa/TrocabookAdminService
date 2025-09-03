@@ -12,6 +12,8 @@ public interface IAdminService {
 
     AdminResponse obterDashboard();
 
+    AdminResponse obterUsuario(int id);
+
     AdminResponse listarUsuarios();
 
     AdminResponse excluirUsuario(int id);

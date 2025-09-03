@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form th:action="@{/cadastrar}" th:object="${admin}" method="post">
+        <input th:field="*{email}" type="email" placeholder="informe seu email" name="email">
+        <input th:field="*{senha}" type="password" placeholder="defina sua senha" name="senha">
+        <button type="submit">Cadastrar</button>
+    </form>
+
+
+</body>
+</html>

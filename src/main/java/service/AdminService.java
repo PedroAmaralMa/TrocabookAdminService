@@ -2,14 +2,13 @@ package service;
 
 import DTO.DashboardDTO;
 import DTO.UsuarioDTO;
-import config.PrincipalApiClient;
+import config.IPrincipalApiClient;
 import model.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.AdminRepository;
 import response.AdminResponse;
 
-import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -18,7 +17,7 @@ public class AdminService implements IAdminService {
     private AdminRepository adminRepository;
 
     @Autowired
-    private PrincipalApiClient api;
+    private IPrincipalApiClient api;
 
 
     public AdminResponse cadastro(String nome, String email, String senha) {
@@ -72,6 +71,15 @@ public class AdminService implements IAdminService {
         }
 
 
+    }
+
+    public AdminResponse obterUsuario(int id) {
+        try{
+            UsuarioDTO usuario = api.obterUsuario(id);
+            return new AdminResponse(true, "Usuario obtido com sucesso", usuario);
+        } catch (Exception e){
+            return new AdminResponse(false, "Erro no obter usuario" + e.getMessage(), null);
+        }
     }
 
     public AdminResponse excluirUsuario(int id) {
