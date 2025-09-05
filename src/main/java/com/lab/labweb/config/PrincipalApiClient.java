@@ -1,8 +1,9 @@
-package config;
+package com.lab.labweb.config;
 
-import DTO.UsuarioDTO;
+import com.lab.labweb.DTO.UsuarioDTO;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -24,6 +25,7 @@ public class PrincipalApiClient implements IPrincipalApiClient {
 
     public List<UsuarioDTO> listarUsuarios() {
         UsuarioDTO u = new UsuarioDTO();
+        List<UsuarioDTO> usuarios = new ArrayList<>();
         u.setId(1);
         u.setNome("Usuário Teste");
         u.setEmail("teste@email.com");
@@ -32,12 +34,13 @@ public class PrincipalApiClient implements IPrincipalApiClient {
         u.setFoto("usuario.jpg");
         u.setAvaliacao(3);
         u.setStatus('A');
-        return List.of(u);
+        usuarios.add(u);
+        return usuarios;
     }
 
     public UsuarioDTO obterUsuario(int id) {
         UsuarioDTO u = new UsuarioDTO();
-        u.setId(1);
+        u.setId(id);
         u.setNome("Usuário Teste");
         u.setEmail("teste@email.com");
         u.setSenha("123456");
@@ -48,15 +51,37 @@ public class PrincipalApiClient implements IPrincipalApiClient {
         return u;
     }
 
+    public UsuarioDTO obterUsuario(int id, List<UsuarioDTO> lista){
+        for (UsuarioDTO u : lista){
+            if (u.getId() == id) {
+                return u;
+            }
+        }
+        return null;
+    }
+
 
     public void deletarUsuario(int id) {
         System.out.println("Usuário deletado: " + id);
+    }
+
+    public void deletarUsuario(int id, List<UsuarioDTO> lista){
+        lista.removeIf(u -> u.getId() == id);
     }
 
 
     public UsuarioDTO atualizarUsuario(int id, UsuarioDTO usuarioDTO) {
         usuarioDTO.setNome(usuarioDTO.getNome() + " (atualizado)");
         return usuarioDTO;
+    }
+
+    public UsuarioDTO atualizarUsuario(int id, UsuarioDTO usuarioDTONovo, List<UsuarioDTO> lista) {
+        for (int i =0; i < lista.size(); i++){
+            if (lista.get(i).getId() == id) {
+                lista.set(i, usuarioDTONovo);
+            }
+        }
+        return usuarioDTONovo;
     }
 }
 

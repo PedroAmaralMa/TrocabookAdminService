@@ -1,6 +1,6 @@
-package repository;
+package com.lab.labweb.repository;
 
-import model.Admin;
+import com.lab.labweb.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

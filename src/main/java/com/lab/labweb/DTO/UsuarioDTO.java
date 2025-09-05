@@ -1,4 +1,4 @@
-package DTO;
+package com.lab.labweb.DTO;
 
 import lombok.Getter;
 import lombok.Setter;

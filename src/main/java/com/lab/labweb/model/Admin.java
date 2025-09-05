@@ -1,4 +1,4 @@
-package model;
+package com.lab.labweb.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

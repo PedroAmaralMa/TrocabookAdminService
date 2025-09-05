@@ -1,13 +1,13 @@
-package config;
+package com.lab.labweb.config;
 
 
-import DTO.UsuarioDTO;
+import com.lab.labweb.DTO.UsuarioDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.cloud.openfeign.FeignClient;
 
 import java.util.List;
 
-@FeignClient(name = "principal-api", url = "http://localhost:8080/dados")
+@FeignClient(name = "principal-api", url = "http://localhost:8080")
 public interface IPrincipalApiClient {
     @GetMapping("/dados/totalUsuarios")
     Long obterTotalUsuarios();
@@ -29,4 +29,10 @@ public interface IPrincipalApiClient {
 
     @PutMapping("/dados/atualizarUsuario/{id}")
     UsuarioDTO atualizarUsuario(@PathVariable int id, @RequestBody UsuarioDTO usuarioDTO);
+
+    void deletarUsuario(int id, List<UsuarioDTO> lista);
+
+    UsuarioDTO obterUsuario(int id, List<UsuarioDTO> lista);
+
+    UsuarioDTO atualizarUsuario(int id, UsuarioDTO usuarioDTO, List<UsuarioDTO> lista);
 }

@@ -1,4 +1,4 @@
-package response;
+package com.lab.labweb.response;
 
 import lombok.Getter;
 import lombok.Setter;

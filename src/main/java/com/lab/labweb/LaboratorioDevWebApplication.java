@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@EnableFeignClients(basePackages = "config")
+@EnableFeignClients(basePackages = "com.lab.labweb.config")
 public class LaboratorioDevWebApplication {
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
-package service;
+package com.lab.labweb.service;
 
-import DTO.UsuarioDTO;
-import response.AdminResponse;
+import com.lab.labweb.DTO.UsuarioDTO;
+import com.lab.labweb.response.AdminResponse;
 
 import java.util.List;
 
@@ -14,9 +14,15 @@ public interface IAdminService {
 
     AdminResponse obterUsuario(int id);
 
+    AdminResponse obterUsuario(int id, List<UsuarioDTO> lista);
+
     AdminResponse listarUsuarios();
 
     AdminResponse excluirUsuario(int id);
 
+    AdminResponse excluirUsuario(int id, List<UsuarioDTO> lista);
+
     AdminResponse alterarUsuario(int id, UsuarioDTO usuarioDTO);
+
+    AdminResponse alterarUsuario(int id, UsuarioDTO usuarioDTO, List<UsuarioDTO> lista);
 }

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+    <form th:action="@{'/alterar/' + ${usuario.id}" th:object="${usuario}" method="post">
+        <input th:value="*{usario.avaliacao}" type="email" placeholder="informe seu email" name="email">
+        <input th:value="*{usario.status}" type="email" placeholder="informe seu email" name="email">
+        <button type="submit">Alterar</button>
+    </form>
 
 </body>
 </html>
