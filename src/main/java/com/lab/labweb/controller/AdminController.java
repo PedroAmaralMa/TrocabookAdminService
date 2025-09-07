@@ -1,7 +1,9 @@
 package com.lab.labweb.controller;
 
+import com.lab.labweb.DTO.DashboardDTO;
 import com.lab.labweb.DTO.UsuarioDTO;
 import com.lab.labweb.model.Admin;
+import com.lab.labweb.model.Dashboard;
 import com.lab.labweb.response.AdminResponse;
 import com.lab.labweb.service.IAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,14 +83,30 @@ public class AdminController {
     @GetMapping("/alterar/{id}")
     public String alterar(@PathVariable int id, Model model) {
         adminResponse = adminService.obterUsuario(id, lista);
-        model.addAttribute("usuario", adminResponse.getData());
-        return "alterar";
+        if (adminResponse.isResultado()) {
+            UsuarioDTO usuario = (UsuarioDTO) adminResponse.getData();
+            model.addAttribute("usuario", usuario);
+            return "alterar";
+        }
+        return "redirect:/home";
+
     }
 
-    @PutMapping("/alterar/{id}")
+    @PostMapping("/alterar/{id}")
     public String alterar(@PathVariable int id, UsuarioDTO usuario) {
         adminResponse = adminService.alterarUsuario(id, usuario, lista);
         return "redirect:/listaUsuarios";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        adminResponse = adminService.obterDashboard();
+        List<Dashboard> dashboards = (List<Dashboard>) adminResponse.getData();
+        if (adminResponse.isResultado()) {
+            model.addAttribute("dashboards", dashboards);
+            return "dashboard";
+        }
+        return "dashboard";
     }
 
 

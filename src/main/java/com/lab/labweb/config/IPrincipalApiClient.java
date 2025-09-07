@@ -1,6 +1,7 @@
 package com.lab.labweb.config;
 
 
+import com.lab.labweb.DTO.DashboardDTO;
 import com.lab.labweb.DTO.UsuarioDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,14 +10,8 @@ import java.util.List;
 
 @FeignClient(name = "principal-api", url = "http://localhost:8080")
 public interface IPrincipalApiClient {
-    @GetMapping("/dados/totalUsuarios")
-    Long obterTotalUsuarios();
-
-    @GetMapping("/dados/totalLivros")
-    Long obterTotalLivros();
-
-    @GetMapping("/dados/totalNegociacao")
-    long obterTotalNegociacao();
+    @GetMapping("/dados/dashboard")
+    DashboardDTO obterDashboard();
 
     @GetMapping("/dados/listarUsuarios")
     List<UsuarioDTO> listarUsuarios();

@@ -1,11 +1,12 @@
 package com.lab.labweb.service;
 
-import com.lab.labweb.DTO.DashboardDTO;
 import com.lab.labweb.DTO.UsuarioDTO;
 import com.lab.labweb.config.IPrincipalApiClient;
 import com.lab.labweb.config.PrincipalApiClient;
 import com.lab.labweb.model.Admin;
+import com.lab.labweb.model.Dashboard;
 import com.lab.labweb.repository.AdminRepository;
+import com.lab.labweb.repository.DashboardRepository;
 import com.lab.labweb.response.AdminResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,11 @@ public class AdminService implements IAdminService {
     @Autowired
     private PrincipalApiClient api;
 
+    @Autowired
+    private DashboardRepository dashboardRepository;
 
-    public AdminResponse cadastro(String nome, String email, String senha) {
+
+    public AdminResponse cadastro(String nome, String senha, String email) {
         try {
             Admin admin = new Admin();
             admin.setNome(nome);
@@ -54,15 +58,8 @@ public class AdminService implements IAdminService {
 
     public AdminResponse obterDashboard(){
         try {
-            Long totalUsuarios = api.obterTotalUsuarios();
-            Long totalLivros = api.obterTotalLivros();
-            Long totalNegociacao = api.obterTotalNegociacao();
-
-            DashboardDTO dashboard = new DashboardDTO();
-            dashboard.setTotalUsuarios(totalUsuarios);
-            dashboard.setTotalLivros(totalLivros);
-            dashboard.setTotalNegociacao(totalNegociacao);
-            return new AdminResponse(true, "Dashboard obtido", dashboard);
+            List<Dashboard> listaDashboard = dashboardRepository.findAll();
+            return new AdminResponse(true, "Dashboard obtido", listaDashboard);
         } catch(Exception e){
             return new AdminResponse(false, "Erro no obter dashboard" + e.getMessage(), null);
         }

@@ -5,9 +5,24 @@
     <title>Dashboard</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <p>Total Usuários: <span th:text="${dashboard.totalUsuarios}"></span></p>
-    <p>Total Livros: <span th:text="${dashboard.totalLivros}"></span></p>
-    <p>Total Negociações: <span th:text="${dashboard.totalNegociacao}"></span></p>
+<table>
+    <thead>
+    <tr>
+        <th>Data</th>
+        <th>Total Usuários</th>
+        <th>Total Livros</th>
+        <th>Total Negociações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="d : ${dashboards}">
+        <td th:text="${d.dataCriacao}"></td>
+        <td th:text="${d.totalUsuarios}"></td>
+        <td th:text="${d.totalLivros}"></td>
+        <td th:text="${d.totalNegociacao}"></td>
+    </tr>
+    </tbody>
+</table>
+
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.lab.labweb.config;
 
+import com.lab.labweb.DTO.DashboardDTO;
 import com.lab.labweb.DTO.UsuarioDTO;
 import org.springframework.stereotype.Component;
 
@@ -8,18 +9,13 @@ import java.util.List;
 
 @Component
 public class PrincipalApiClient implements IPrincipalApiClient {
-    public Long obterTotalUsuarios() {
-        return 15L;
-    }
 
-
-    public Long obterTotalLivros() {
-        return 20L;
-    }
-
-
-    public long obterTotalNegociacao() {
-        return 15L;
+    public DashboardDTO obterDashboard() {
+        DashboardDTO dashboard = new DashboardDTO();
+        dashboard.setTotalUsuarios(15L);
+        dashboard.setTotalLivros(20L);
+        dashboard.setTotalNegociacao(15L);
+        return dashboard;
     }
 
 
