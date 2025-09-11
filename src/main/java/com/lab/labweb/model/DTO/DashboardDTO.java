@@ -1,6 +1,5 @@
-package com.lab.labweb.DTO;
+package com.lab.labweb.model.DTO;
 
-import lombok.Data;
 import java.time.LocalDate;
 
 /**
@@ -27,10 +26,41 @@ import java.time.LocalDate;
  *   do dashboard.</li>
  * </ul>
  */
-@Data
 public class DashboardDTO {
     private Long totalUsuarios;
     private Long totalLivros;
     private Long totalNegociacao;
     private LocalDate dataCriacao;
+
+    public Long getTotalUsuarios() {
+        return totalUsuarios;
+    }
+
+    public void setTotalUsuarios(Long totalUsuarios) {
+        this.totalUsuarios = totalUsuarios;
+    }
+
+    public Long getTotalLivros() {
+        return totalLivros;
+    }
+
+    public void setTotalLivros(Long totalLivros) {
+        this.totalLivros = totalLivros;
+    }
+
+    public Long getTotalNegociacao() {
+        return totalNegociacao;
+    }
+
+    public void setTotalNegociacao(Long totalNegociacao) {
+        this.totalNegociacao = totalNegociacao;
+    }
+
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 }

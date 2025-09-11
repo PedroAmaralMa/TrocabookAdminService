@@ -1,8 +1,6 @@
 package com.lab.labweb.scheduler;
 
-import com.lab.labweb.DTO.DashboardDTO;
-import com.lab.labweb.config.IPrincipalApiClient;
-import com.lab.labweb.config.PrincipalApiClient;
+import com.lab.labweb.model.DTO.DashboardDTO;
 import com.lab.labweb.model.Dashboard;
 import com.lab.labweb.repository.DashboardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +15,6 @@ import java.time.LocalDate;
  *
  * A execução é programada para ocorrer todos os dias à meia-noite
  * através da anotação {@link Scheduled}.
- *
- * <p><b>IMPORTANTE:</b></p>
- * <ul>
- *     <li>O atributo {@link PrincipalApiClient} está sendo usado
- *     temporariamente apenas para <b>mock de testes</b>.</li>
- *     <li>No futuro, esse atributo será removido e substituído
- *     pelo {@link IPrincipalApiClient}, que é a interface oficial
- *     de comunicação com a API principal.</li>
- * </ul>
- *
  * Fluxo de execução:
  * <ol>
  *     <li>Obter os dados do dashboard via API mockada.</li>
@@ -39,15 +27,6 @@ import java.time.LocalDate;
  */
 @Component
 public class SalvarDashboardDiario {
-
-    /**
-     * Cliente API temporário para mock de testes.
-     *
-     * <p><b>Será removido no futuro</b> e substituído por
-     * {@link IPrincipalApiClient}.</p>
-     */
-    @Autowired
-    private PrincipalApiClient api;
 
     @Autowired
     private DashboardRepository dashboardRepository;

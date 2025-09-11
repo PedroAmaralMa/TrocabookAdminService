@@ -2,6 +2,8 @@ package com.lab.labweb.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 /**
  * Entidade que representa o administrador do sistema.
  *
@@ -22,11 +24,17 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String nome;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String senha;
+
+    @OneToMany(mappedBy = "admin_responsavel_id", cascade = CascadeType.ALL)
+    private List<LogAdmin> logAdmins;
 
     // Getters e Setters
     public int getId() {

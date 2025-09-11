@@ -1,4 +1,4 @@
-package com.lab.labweb.DTO;
+package com.lab.labweb.model.DTO;
 
 import lombok.Data;
 
@@ -28,7 +28,6 @@ import lombok.Data;
  *   do DTO exposto em APIs públicas por questões de segurança.</li>
  * </ul>
  */
-@Data
 public class UsuarioDTO {
     private int id;
     private String nome;
@@ -38,4 +37,68 @@ public class UsuarioDTO {
     private String foto;
     private double avaliacao;
     private char status;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public double getAvaliacao() {
+        return avaliacao;
+    }
+
+    public void setAvaliacao(double avaliacao) {
+        this.avaliacao = avaliacao;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
+    }
 }

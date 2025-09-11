@@ -1,5 +1,6 @@
 package com.lab.labweb.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -29,6 +30,7 @@ public class Dashboard {
 
     private Long totalNegociacao;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataCriacao;
 
     // Getters e Setters
