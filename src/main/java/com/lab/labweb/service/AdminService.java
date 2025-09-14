@@ -10,6 +10,7 @@ import com.lab.labweb.repository.AdminRepository;
 import com.lab.labweb.repository.DashboardRepository;
 import com.lab.labweb.repository.LogAdminRepository;
 import com.lab.labweb.response.AdminResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,10 +29,14 @@ public class AdminService implements IAdminService {
 
     final LogAdminRepository logAdminRepository;
 
-    AdminService(AdminRepository adminRepository, DashboardRepository dashboardRepository, LogAdminRepository logAdminRepository) {
+    private final IDadosService api;
+
+    @Autowired
+    AdminService(AdminRepository adminRepository, DashboardRepository dashboardRepository, LogAdminRepository logAdminRepository, IDadosService api) {
         this.adminRepository = adminRepository;
         this.dashboardRepository = dashboardRepository;
         this.logAdminRepository = logAdminRepository;
+        this.api = api;
     }
     /**
      * Requisito: "Administrador pode se cadastrar".
@@ -56,9 +61,12 @@ public class AdminService implements IAdminService {
     @Override
     public AdminResponse loginAdmin(String email, String senha) {
         try {
+            AdminDTO adminResposta = new AdminDTO();
             Admin admin = adminRepository.findByEmailAndSenha(email, senha);
             if (admin != null) {
-                return new AdminResponse(true, "Login realizado com sucesso", admin);
+                adminResposta.setId(admin.getId());
+                adminResposta.setNome(admin.getNome());
+                return new AdminResponse(true, "Login realizado com sucesso", adminResposta);
             }
             return new AdminResponse(false, "Credenciais inválidas", null);
         } catch (Exception e) {
@@ -78,7 +86,7 @@ public class AdminService implements IAdminService {
     @Override
     public AdminResponse obterDashboard() {
         try {
-            List<Dashboard> listaDashboard = dashboardRepository.findAll();
+            List<Dashboard> listaDashboard = dashboardRepository.findAllByOrderByDataCriacaoDesc();
             return new AdminResponse(true, "Dashboard obtido", listaDashboard);
         } catch (Exception e) {
             return new AdminResponse(false, "Erro ao obter dashboard: " + e.getMessage(), null);

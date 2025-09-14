@@ -30,7 +30,6 @@ public class DashboardDTO {
     private Long totalUsuarios;
     private Long totalLivros;
     private Long totalNegociacao;
-    private LocalDate dataCriacao;
 
     public Long getTotalUsuarios() {
         return totalUsuarios;
@@ -56,11 +55,4 @@ public class DashboardDTO {
         this.totalNegociacao = totalNegociacao;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
-    }
-
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
 }

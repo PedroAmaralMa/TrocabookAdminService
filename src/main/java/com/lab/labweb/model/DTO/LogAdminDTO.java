@@ -8,22 +8,11 @@ package com.lab.labweb.model.DTO;
  */
 public class LogAdminDTO {
 
-    private long id;
-
     private String operacao;
 
     private int cdUsuario;
 
     private int adminResponsavelId;
-
-    // Getters e Setters
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getOperacao() {
         return operacao;

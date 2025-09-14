@@ -3,6 +3,7 @@ package com.lab.labweb.scheduler;
 import com.lab.labweb.model.DTO.DashboardDTO;
 import com.lab.labweb.model.Dashboard;
 import com.lab.labweb.repository.DashboardRepository;
+import com.lab.labweb.service.IDadosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,8 +29,15 @@ import java.time.LocalDate;
 @Component
 public class SalvarDashboardDiario {
 
+    final DashboardRepository dashboardRepository;
+
+    private final IDadosService api;
+
     @Autowired
-    private DashboardRepository dashboardRepository;
+    SalvarDashboardDiario(DashboardRepository dashboardRepository, IDadosService api) {
+        this.dashboardRepository = dashboardRepository;
+        this.api = api;
+    }
 
     /**
      * Tarefa agendada para ser executada diariamente à meia-noite.

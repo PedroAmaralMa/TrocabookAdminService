@@ -33,7 +33,7 @@ public class Admin {
     @Column(nullable = false)
     private String senha;
 
-    @OneToMany(mappedBy = "admin_responsavel_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "adminResponsavel", cascade = CascadeType.ALL)
     private List<LogAdmin> logAdmins;
 
     // Getters e Setters
