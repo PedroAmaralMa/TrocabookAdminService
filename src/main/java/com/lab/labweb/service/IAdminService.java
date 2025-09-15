@@ -35,4 +35,6 @@ public interface IAdminService {
     AdminResponse alterarUsuario(LogAdminDTO logadmin, int idUsuario, UsuarioDTO usuarioDTO);
 
     Admin obterAdminPorId(int id);
+
+    byte[] gerarExcel() throws Exception;
 }

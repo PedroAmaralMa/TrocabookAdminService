@@ -6,17 +6,19 @@ import com.lab.labweb.model.DTO.AdminDTO;
 import com.lab.labweb.model.DTO.LogAdminDTO;
 import com.lab.labweb.model.DTO.UsuarioDTO;
 import com.lab.labweb.model.Admin;
-import com.lab.labweb.repository.AdminRepository;
+import com.lab.labweb.model.Dashboard;
 import com.lab.labweb.response.AdminResponse;
 import com.lab.labweb.service.IAdminService;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -96,13 +98,14 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/excluir")
-    public ResponseEntity<Object> excluir(@RequestBody LogAdminDTO logAdminDTO) {
+    @PostMapping("/excluir")
+    public ResponseEntity<Map<String,String>> excluir(@RequestBody LogAdminDTO logAdminDTO) {
         adminResponse = adminService.excluirUsuario(logAdminDTO);
         if (!adminResponse.isResultado()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(adminResponse.getMensagem());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("message", adminResponse.getMensagem()));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(adminResponse.getData());
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message", "Usuário excluido com sucesso!"));
         }
     }
 
@@ -115,6 +118,25 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.OK).body(adminResponse.getData());
         }
     }
+
+    @GetMapping("/excel")
+    public ResponseEntity<byte[]> downloadExcelDashboard() {
+        try {
+            byte[] excelBytes = adminService.gerarExcel();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=dashboard.xlsx");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(excelBytes);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
 
 
 
