@@ -18,7 +18,7 @@ import java.time.LocalDate;
  * através da anotação {@link Scheduled}.
  * Fluxo de execução:
  * <ol>
- *     <li>Obter os dados do dashboard via API mockada.</li>
+ *     <li>Obter os dados do dashboard via API.</li>
  *     <li>Transformar os dados em uma entidade {@link Dashboard}.</li>
  *     <li>Salvar o registro no banco de dados.</li>
  * </ol>

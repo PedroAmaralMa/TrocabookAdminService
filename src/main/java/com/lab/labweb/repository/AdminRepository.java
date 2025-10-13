@@ -5,35 +5,35 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Interface de repositório para a entidade {@link Admin}.
+ * Repositório responsável por gerenciar as operações de persistência
+ * da entidade {@link Admin} no banco de dados.
  *
- * Estende {@link JpaRepository} para fornecer operações CRUD
- * básicas e métodos de busca personalizados.
+ * <p>Esta interface herda de {@link JpaRepository}, o que permite o uso
+ * de métodos prontos para CRUD e paginação sem necessidade de implementação manual.</p>
  *
- * Exemplos de operações herdadas de JpaRepository:
+ * <p><b>Operações padrão herdadas de JpaRepository incluem:</b></p>
  * <ul>
- *     <li>save(Admin admin)</li>
- *     <li>findById(Integer id)</li>
- *     <li>findAll()</li>
- *     <li>delete(Admin admin)</li>
+ *     <li>{@code save(Admin admin)} – salva ou atualiza um administrador</li>
+ *     <li>{@code findById(Integer id)} – busca um administrador pelo ID</li>
+ *     <li>{@code findAll()} – retorna todos os administradores cadastrados</li>
+ *     <li>{@code delete(Admin admin)} – remove um administrador do banco</li>
  * </ul>
  *
- * Também define métodos personalizados para autenticação e busca de Admins.
- *
- *
- *
+ * <p>Além das operações padrão, esta interface define métodos de consulta
+ * personalizados com base na convenção de nomes do Spring Data JPA.</p>
  */
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
 
     /**
-     * Busca um administrador pelo email e senha.
+     * Busca um administrador com base no email e senha fornecidos.
      *
-     * Usado para realizar login de administradores no sistema.
+     * <p>Este método é utilizado durante o processo de login
+     * para verificar se as credenciais correspondem a um administrador existente.</p>
      *
-     * @param email O email do administrador
-     * @param senha A senha do administrador
-     * @return O objeto Admin caso exista, ou null caso não seja encontrado
+     * @param email o email cadastrado do administrador
+     * @param senha a senha correspondente ao administrador
+     * @return o objeto {@link Admin} correspondente, ou {@code null} caso não seja encontrado
      */
     Admin findByEmailAndSenha(String email, String senha);
 }

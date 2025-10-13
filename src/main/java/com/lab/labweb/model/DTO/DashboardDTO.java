@@ -3,33 +3,40 @@ package com.lab.labweb.model.DTO;
 import java.time.LocalDate;
 
 /**
- * Data Transfer Object (DTO) para o Dashboard.
+ * Data Transfer Object (DTO) para transferência de dados do Dashboard.
  *
- * <p>Essa classe é utilizada para transferir dados agregados do sistema,
- * como total de usuários, total de livros e total de negociações,
- * geralmente entre o back-end e o front-end ou entre serviços.</p>
+ * <p>Esta classe encapsula dados agregados do sistema, como total de usuários,
+ * total de livros e total de negociações, geralmente utilizados pelo front-end
+ * ou por outros serviços internos.</p>
  *
  * <p><b>Atributos:</b></p>
  * <ul>
- *   <li>{@link #totalUsuarios} - Total de usuários cadastrados no sistema.</li>
- *   <li>{@link #totalLivros} - Total de livros disponíveis no sistema.</li>
- *   <li>{@link #totalNegociacao} - Total de negociações realizadas.</li>
- *   <li>{@link #dataCriacao} - Data de referência da contagem dos dados.</li>
+ *   <li>{@code totalUsuarios} – total de usuários cadastrados no sistema</li>
+ *   <li>{@code totalLivros} – total de livros disponíveis no sistema</li>
+ *   <li>{@code totalNegociacao} – total de negociações realizadas</li>
+ *   <li>{@code dataCriacao} – data de referência da contagem dos dados (para snapshots)</li>
  * </ul>
  *
  * <p><b>Observações:</b></p>
  * <ul>
- *   <li>Classe apenas para transferência de dados, não possui lógica de negócio.</li>
- *   <li>Utilizada tanto para a inicialização de dados no banco quanto para
- *   exibição no dashboard (via HTML ou API REST).</li>
- *   <li>No futuro, a data de criação será importante para snapshots históricos
- *   do dashboard.</li>
+ *   <li>Classe apenas para transferência de dados, sem lógica de negócio.</li>
+ *   <li>Utilizada tanto na exibição do dashboard via API REST quanto em relatórios internos.</li>
+ *   <li>Permite rastreamento histórico dos dados ao longo do tempo.</li>
  * </ul>
  */
 public class DashboardDTO {
+
+    /** Total de usuários cadastrados no sistema. */
     private Long totalUsuarios;
+
+    /** Total de livros disponíveis no sistema. */
     private Long totalLivros;
+
+    /** Total de negociações realizadas no sistema. */
     private Long totalNegociacao;
+
+    /** Data de referência para os dados agregados (opcional para relatórios). */
+    private LocalDate dataCriacao;
 
     public Long getTotalUsuarios() {
         return totalUsuarios;
@@ -55,4 +62,11 @@ public class DashboardDTO {
         this.totalNegociacao = totalNegociacao;
     }
 
+    public LocalDate getDataCriacao() {
+        return dataCriacao;
+    }
+
+    public void setDataCriacao(LocalDate dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 }

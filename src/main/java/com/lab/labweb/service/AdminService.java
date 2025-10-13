@@ -16,35 +16,48 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayOutputStream;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * Implementação concreta dos serviços administrativos.
+ * Implementação concreta da interface {@link IAdminService}.
  *
+ * <p>Esta classe contém as regras de negócio relacionadas aos administradores da plataforma,
+ * incluindo cadastro, autenticação, visualização de dashboards, gerenciamento de usuários
+ * e exportação de dados em formato Excel.</p>
  */
 @Service
 public class AdminService implements IAdminService {
 
     final AdminRepository adminRepository;
-
     final DashboardRepository dashboardRepository;
-
     final LogAdminRepository logAdminRepository;
-
     private final IDadosService api;
 
+    /**
+     * Construtor para injeção de dependências.
+     *
+     * @param adminRepository repositório de administradores
+     * @param dashboardRepository repositório de dashboards
+     * @param logAdminRepository repositório de logs administrativos
+     * @param api serviço externo para manipulação de dados de usuários
+     */
     @Autowired
-    AdminService(AdminRepository adminRepository, DashboardRepository dashboardRepository, LogAdminRepository logAdminRepository, IDadosService api) {
+    AdminService(AdminRepository adminRepository, DashboardRepository dashboardRepository,
+                 LogAdminRepository logAdminRepository, IDadosService api) {
         this.adminRepository = adminRepository;
         this.dashboardRepository = dashboardRepository;
         this.logAdminRepository = logAdminRepository;
         this.api = api;
     }
+
     /**
      * Requisito: "Administrador pode se cadastrar".
+     * <p>Cadastra um novo administrador na base de dados.</p>
+     *
+     * @param adminDto objeto com os dados do administrador (nome, email e senha)
+     * @return {@link AdminResponse} indicando o resultado da operação
      */
     @Override
     public AdminResponse cadastro(AdminDTO adminDto) {
@@ -62,6 +75,11 @@ public class AdminService implements IAdminService {
 
     /**
      * Requisito: "Administrador pode logar".
+     * <p>Realiza a autenticação do administrador com base no email e senha.</p>
+     *
+     * @param email email do administrador
+     * @param senha senha do administrador
+     * @return {@link AdminResponse} com os dados do administrador autenticado, se válido
      */
     @Override
     public AdminResponse loginAdmin(String email, String senha) {
@@ -79,6 +97,13 @@ public class AdminService implements IAdminService {
         }
     }
 
+    /**
+     * Busca e retorna um administrador pelo seu identificador.
+     *
+     * @param id identificador único do administrador
+     * @return objeto {@link Admin} correspondente
+     * @throws RuntimeException caso o administrador não seja encontrado
+     */
     @Override
     public Admin obterAdminPorId(int id) {
         return adminRepository.findById(id)
@@ -87,6 +112,9 @@ public class AdminService implements IAdminService {
 
     /**
      * Requisito: "Administrador visualiza dados agregados da plataforma".
+     * <p>Obtém a lista de dashboards ordenada pela data de criação mais recente.</p>
+     *
+     * @return {@link AdminResponse} contendo os dados do dashboard
      */
     @Override
     public AdminResponse obterDashboard() {
@@ -100,6 +128,10 @@ public class AdminService implements IAdminService {
 
     /**
      * Requisito: "Administrador pode excluir usuários".
+     * <p>Exclui um usuário do sistema e registra a operação no log administrativo.</p>
+     *
+     * @param logAdmin objeto contendo as informações do log e do usuário excluído
+     * @return {@link AdminResponse} indicando o resultado da exclusão
      */
     @Override
     public AdminResponse excluirUsuario(LogAdminDTO logAdmin) {
@@ -114,6 +146,12 @@ public class AdminService implements IAdminService {
 
     /**
      * Requisito: "Administrador pode alterar dados de usuários".
+     * <p>Atualiza as informações de um usuário e registra a operação no log administrativo.</p>
+     *
+     * @param loginAdmin informações do administrador e da operação realizada
+     * @param idUsuario identificador do usuário a ser alterado
+     * @param usuarioDTO novos dados do usuário
+     * @return {@link AdminResponse} com o resultado da atualização
      */
     @Override
     public AdminResponse alterarUsuario(LogAdminDTO loginAdmin, int idUsuario, UsuarioDTO usuarioDTO) {
@@ -126,6 +164,15 @@ public class AdminService implements IAdminService {
         }
     }
 
+    /**
+     * Requisito: "Administrador pode exportar dados da plataforma em Excel".
+     * <p>Gera um arquivo Excel com informações dos dashboards registrados, incluindo
+     * total de usuários, livros, negociações e data de criação.</p>
+     *
+     * @return array de bytes representando o arquivo Excel gerado
+     * @throws Exception caso ocorra erro durante a geração
+     */
+    @Override
     public byte[] gerarExcel() throws Exception {
         AdminResponse adminResponse = this.obterDashboard();
         if (!adminResponse.isResultado()) {
@@ -174,10 +221,8 @@ public class AdminService implements IAdminService {
             dateStyle.setBorderLeft(BorderStyle.THIN);
             dateStyle.setBorderRight(BorderStyle.THIN);
 
-            // --- Coluna inicial para centralizar tabela ---
-            int colunaInicial = 2;
-
             // --- Cabeçalho ---
+            int colunaInicial = 2;
             Row header = sheet.createRow(0);
             String[] colunas = {"Total Usuários", "Total Livros", "Total Negociações", "Data de Criação"};
             for (int i = 0; i < colunas.length; i++) {
@@ -224,10 +269,13 @@ public class AdminService implements IAdminService {
         }
     }
 
-
-
-
-    public void salvarOperacao(LogAdminDTO logAdmin){
+    /**
+     * Registra no banco de dados as operações administrativas realizadas,
+     * como exclusões e alterações de usuários.
+     *
+     * @param logAdmin objeto contendo informações da operação e do administrador responsável
+     */
+    public void salvarOperacao(LogAdminDTO logAdmin) {
         LogAdmin novoLogAdmin = new LogAdmin();
         novoLogAdmin.setOperacao(LogAdmin.Operacao.valueOf(logAdmin.getOperacao()));
         novoLogAdmin.setAdminResponsavel(obterAdminPorId(logAdmin.getAdminResponsavelId()));
