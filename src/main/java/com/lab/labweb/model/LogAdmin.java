@@ -1,70 +1,36 @@
 package com.lab.labweb.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import java.time.LocalDate;
 
-/**
- * Entidade que representa um registro de operação realizada por um administrador.
- *
- * <p>Esta classe mantém o histórico de ações críticas executadas por administradores,
- * permitindo rastreabilidade e auditoria do sistema.</p>
- *
- * <p><b>Atributos:</b></p>
- * <ul>
- *   <li>{@link #id} – Identificador único do log.</li>
- *   <li>{@link #operacao} – Tipo de operação realizada (ALTERACAO ou EXCLUSAO).</li>
- *   <li>{@link #adminResponsavel} – Administrador que executou a operação.</li>
- *   <li>{@link #cd_usuario} – Código do usuário alvo da operação.</li>
- *   <li>{@link #dataOperacao} – Data em que a operação foi realizada.</li>
- * </ul>
- *
- * <p><b>Observações:</b></p>
- * <ul>
- *   <li>O relacionamento {@link Admin} permite associar cada log ao administrador responsável.</li>
- *   <li>A data da operação é formatada como "dd/MM/yyyy" para exibição consistente em JSON.</li>
- *   <li>O enum {@link Operacao} define as operações possíveis: ALTERACAO e EXCLUSAO.</li>
- * </ul>
- */
-@Entity
+
+import com.google.cloud.Timestamp;
+
 public class LogAdmin {
 
-    /** Identificador único do log. */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    /** Tipo de operação realizada (ALTERACAO ou EXCLUSAO). */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Operacao operacao;
 
-    /** Administrador responsável pela operação. */
-    @ManyToOne
-    @JoinColumn(name = "admin_responsavel_id")
-    private Admin adminResponsavel;
+    private String uidAdmin;
 
-    /** Código do usuário alvo da operação. */
-    @Column(nullable = false)
-    private int cd_usuario;
+    private String uidUsuario;
 
-    /** Data em que a operação foi realizada. */
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataOperacao;
 
-    /**
-     * Enumeração das operações possíveis em LogAdmin.
-     */
-    public enum Operacao {
-        ALTERACAO, EXCLUSAO
+    private Timestamp dataOperacao;
+
+    public LogAdmin() {
     }
 
-    // Getters e Setters
-    public long getId() {
+    public enum Operacao {
+        ALTERACAO,
+        DESATIVACAO,
+        REATIVACAO
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,27 +42,27 @@ public class LogAdmin {
         this.operacao = operacao;
     }
 
-    public Admin getAdminResponsavel() {
-        return adminResponsavel;
+    public String getUidAdmin() {
+        return uidAdmin;
     }
 
-    public void setAdminResponsavel(Admin adminResponsavel) {
-        this.adminResponsavel = adminResponsavel;
+    public void setUidAdmin(String uidAdmin) {
+        this.uidAdmin = uidAdmin;
     }
 
-    public int getCd_usuario() {
-        return cd_usuario;
+    public String getUidUsuario() {
+        return uidUsuario;
     }
 
-    public void setCd_usuario(int cd_usuario) {
-        this.cd_usuario = cd_usuario;
+    public void setUidUsuario(String uidUsuario) {
+        this.uidUsuario = uidUsuario;
     }
 
-    public LocalDate getDataOperacao() {
+    public Timestamp getDataOperacao() {
         return dataOperacao;
     }
 
-    public void setDataOperacao(LocalDate dataOperacao) {
+    public void setDataOperacao(Timestamp dataOperacao) {
         this.dataOperacao = dataOperacao;
     }
 }
