@@ -9,9 +9,12 @@ import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseConfig {
@@ -21,16 +24,23 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
+        String path = caminhoCredencial.startsWith("classpath:")
+                ? caminhoCredencial.substring(10)
+                : caminhoCredencial;
 
-        try (FileInputStream serviceAccount =
-                     new FileInputStream(caminhoCredencial)) {
+        Resource resource = new ClassPathResource(path);
+        InputStream serviceAccount;
 
-            FirebaseOptions firebaseOptions =
-                    FirebaseOptions.builder()
-                            .setCredentials(
-                                    GoogleCredentials.fromStream(serviceAccount)
-                            )
-                            .build();
+        if (resource.exists()) {
+            serviceAccount = resource.getInputStream();
+        } else {
+            serviceAccount = new FileInputStream(caminhoCredencial);
+        }
+
+        try (serviceAccount) {
+            FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .build();
 
             if (!FirebaseApp.getApps().isEmpty()) {
                 return FirebaseApp.getInstance();

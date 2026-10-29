@@ -8,11 +8,13 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -31,48 +33,60 @@ public class JwtConfig {
 
     @Bean
     public RSAPrivateKey rsaPrivateKey() throws Exception {
-        String privateKeyPem =
-                Files.readString(Path.of(privateKeyPath));
+        String path = privateKeyPath.startsWith("classpath:")
+                ? privateKeyPath.substring(10)
+                : privateKeyPath;
+
+        String privateKeyPem;
+        Resource resource = new ClassPathResource(path);
+
+        if (resource.exists()) {
+            try (InputStream inputStream = resource.getInputStream()) {
+                privateKeyPem = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        } else {
+            privateKeyPem = java.nio.file.Files.readString(java.nio.file.Path.of(privateKeyPath));
+        }
 
         String privateKeyContent = privateKeyPem
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
 
-        byte[] privateKeyBytes =
-                Base64.getDecoder().decode(privateKeyContent);
+        byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyContent);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-        PKCS8EncodedKeySpec keySpec =
-                new PKCS8EncodedKeySpec(privateKeyBytes);
-
-        KeyFactory keyFactory =
-                KeyFactory.getInstance("RSA");
-
-        return (RSAPrivateKey)
-                keyFactory.generatePrivate(keySpec);
+        return (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
     }
 
     @Bean
     public RSAPublicKey rsaPublicKey() throws Exception {
-        String publicKeyPem =
-                Files.readString(Path.of(publicKeyPath));
+        String path = publicKeyPath.startsWith("classpath:")
+                ? publicKeyPath.substring(10)
+                : publicKeyPath;
+
+        String publicKeyPem;
+        Resource resource = new ClassPathResource(path);
+
+        if (resource.exists()) {
+            try (InputStream inputStream = resource.getInputStream()) {
+                publicKeyPem = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        } else {
+            publicKeyPem = java.nio.file.Files.readString(java.nio.file.Path.of(publicKeyPath));
+        }
 
         String publicKeyContent = publicKeyPem
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");
 
-        byte[] publicKeyBytes =
-                Base64.getDecoder().decode(publicKeyContent);
+        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyContent);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
-        X509EncodedKeySpec keySpec =
-                new X509EncodedKeySpec(publicKeyBytes);
-
-        KeyFactory keyFactory =
-                KeyFactory.getInstance("RSA");
-
-        return (RSAPublicKey)
-                keyFactory.generatePublic(keySpec);
+        return (RSAPublicKey) keyFactory.generatePublic(keySpec);
     }
 
     @Bean
@@ -80,15 +94,11 @@ public class JwtConfig {
             RSAPublicKey publicKey,
             RSAPrivateKey privateKey
     ) {
-
         RSAKey rsaKey = new RSAKey.Builder(publicKey)
                 .privateKey(privateKey)
                 .build();
 
-        JWKSource<SecurityContext> jwkSource =
-                new ImmutableJWKSet<>(
-                        new JWKSet(rsaKey)
-                );
+        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(rsaKey));
 
         return new NimbusJwtEncoder(jwkSource);
     }
