@@ -64,13 +64,19 @@ public class SecurityConfig {
                 new CorsConfiguration();
 
         configuration.setAllowedOrigins(
-                List.of("http://localhost:8080")
+                List.of(
+                        "http://localhost:8080",
+                        "https://trocabook-web-cme0guh4a8btf7fd.eastus2-01.azurewebsites.net"
+                )
         );
 
         configuration.setAllowedMethods(
                 List.of(
                         "GET",
+                        "POST",
+                        "PUT",
                         "PATCH",
+                        "DELETE",
                         "OPTIONS"
                 )
         );
@@ -82,7 +88,7 @@ public class SecurityConfig {
                 )
         );
 
-        CorsConfigurationSource source =
+        UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
         ((UrlBasedCorsConfigurationSource) source)
