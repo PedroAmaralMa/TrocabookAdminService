@@ -2,6 +2,7 @@ package com.lab.labweb.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,6 +43,11 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        // LIBERA TODAS AS OPERAÇÕES DE SUPORTE (INCLUINDO /id, /deletar e /responder)
+                        .requestMatchers(HttpMethod.GET, "/api/admin/suporte/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/admin/suporte/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/admin/suporte/**").permitAll()
+
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
 
@@ -88,14 +94,16 @@ public class SecurityConfig {
                 )
         );
 
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
 
-        ((UrlBasedCorsConfigurationSource) source)
-                .registerCorsConfiguration(
-                        "/api/admin/**",
-                        configuration
-                );
+        // Aplica o CORS para todas as rotas da API de administração
+        source.registerCorsConfiguration(
+                "/api/admin/**",
+                configuration
+        );
 
         return source;
     }

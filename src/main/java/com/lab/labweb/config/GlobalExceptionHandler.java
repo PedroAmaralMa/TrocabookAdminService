@@ -17,6 +17,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
+        // Registra o stack trace completo no console do Azure
         log.error("Erro interno capturado no Admin Service: ", e);
 
         Throwable root = e;
